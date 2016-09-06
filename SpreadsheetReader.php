@@ -33,9 +33,10 @@
 		private $Type = false;
 
 		/**
-		 * @param string Path to file
-		 * @param string Original filename (in case of an uploaded file), used to determine file type, optional
-		 * @param string MIME type from an upload, used to determine file type, optional
+		 * @param string $Filepath to file
+		 * @param bool|string $OriginalFilename (in case of an uploaded file), used to determine file type, optional
+		 * @param bool|string $MimeType from an upload, used to determine file type, optional
+		 * @throws Exception
 		 */
 		public function __construct($Filepath, $OriginalFilename = false, $MimeType = false)
 		{
@@ -82,7 +83,6 @@
 				case 'application/msexcel':
 				case 'application/x-msexcel':
 				case 'application/x-ms-excel':
-				case 'application/vnd.ms-excel':
 				case 'application/x-excel':
 				case 'application/x-dos_ms_excel':
 				case 'application/xls':
@@ -194,7 +194,7 @@
 		 *	Note that changing the sheet will rewind the file to the beginning, even if
 		 *	the current sheet index is provided.
 		 *
-		 * @param int Sheet index
+		 * @param int $Index
 		 *
 		 * @return bool True if sheet could be changed to the specified one,
 		 *	false if not (for example, if incorrect index was provided.
@@ -220,6 +220,7 @@
 			// If autoload works, the require line is unnecessary, if it doesn't, it ends badly.
 			if (!class_exists('SpreadsheetReader_'.$Type, false))
 			{
+				/** @noinspection PhpIncludeInspection */
 				require(dirname(__FILE__).DIRECTORY_SEPARATOR.'SpreadsheetReader_'.$Type.'.php');
 			}
 		}
@@ -313,7 +314,7 @@
 		 * Method for SeekableIterator interface. Takes a posiiton and traverses the file to that position
 		 * The value can be retrieved with a `current()` call afterwards.
 		 *
-		 * @param int Position in file
+		 * @param int $Position in file
 		 */
 		public function seek($Position)
 		{
