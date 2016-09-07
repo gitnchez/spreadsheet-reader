@@ -23,12 +23,12 @@
 		private $Index = 0;
 
 		/**
-		 * @var SpreadsheetReader_* Handle for the reader object
+		 * SpreadsheetReader_* Handle for the reader object
 		 */
 		private $Handle = array();
 
 		/**
-		 * @var TYPE_* Type of the contained spreadsheet
+		 *  TYPE_* Type of the contained spreadsheet
 		 */
 		private $Type = false;
 
@@ -36,9 +36,10 @@
 		 * @param string $Filepath to file
 		 * @param bool|string $OriginalFilename (in case of an uploaded file), used to determine file type, optional
 		 * @param bool|string $MimeType from an upload, used to determine file type, optional
+		 * @param mixed $forcedEncoding
 		 * @throws Exception
 		 */
-		public function __construct($Filepath, $OriginalFilename = false, $MimeType = false)
+		public function __construct($Filepath, $OriginalFilename = false, $MimeType = false, $forcedEncoding = null)
 		{
 			if (!is_readable($Filepath))
 			{
@@ -68,6 +69,10 @@
 			if (!$OriginalFilename)
 			{
 				$OriginalFilename = $Filepath;
+			}
+
+			if ($forcedEncoding) {
+				$this->Options['forced_encoding'] = $forcedEncoding;
 			}
 
 			$Extension = strtolower(pathinfo($OriginalFilename, PATHINFO_EXTENSION));

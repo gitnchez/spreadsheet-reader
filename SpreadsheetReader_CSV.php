@@ -28,12 +28,13 @@
 
 		private $CurrentRow = null;
 
-		/**
-		 * @param string Path to file
-		 * @param array Options:
-		 *	Enclosure => string CSV enclosure
-		 *	Separator => string CSV separator
-		 */
+        /**
+         * @param string $Filepath to file
+         * @param array $Options
+         *    Enclosure => string CSV enclosure
+         *    Separator => string CSV separator
+         * @throws Exception
+         */
 		public function __construct($Filepath, array $Options = null)
 		{
 			$this -> Filepath = $Filepath;
@@ -121,6 +122,10 @@
 
 				$this -> Options['Delimiter'] = $Delimiter;
 			}
+
+			if (array_key_exists('forced_encoding', $Options)) {
+			    $this->Encoding = $Options['forced_encoding'];
+            }
 		}
 
 		/**
@@ -134,13 +139,14 @@
 			return array(0 => basename($this -> Filepath));
 		}
 
-		/**
-		 * Changes sheet to another. Because CSV doesn't have any sheets
-		 *	it just rewinds the file so the behaviour is compatible with other
-		 *	sheet readers. (If an invalid index is given, it doesn't do anything.)
-		 *
-		 * @param bool Status
-		 */
+        /**
+         * Changes sheet to another. Because CSV doesn't have any sheets
+         *    it just rewinds the file so the behaviour is compatible with other
+         *    sheet readers. (If an invalid index is given, it doesn't do anything.)
+         *
+         * @param int $Index
+         * @return bool Status
+         */
 		public function ChangeSheet($Index)
 		{
 			if ($Index == 0)
@@ -227,7 +233,7 @@
 				// in the relevan encodings.
 				if ($this -> Encoding != 'ASCII' && $this -> Encoding != 'UTF-8')
 				{
-					$Encoding = $this -> Encoding;
+					//$Encoding = $this -> Encoding;
 					foreach ($this -> CurrentRow as $Key => $Value)
 					{
 						$this -> CurrentRow[$Key] = trim(trim(
